@@ -3,8 +3,8 @@ class SIConverter:
     def __init__(self, filepath):
         self.dictionary = self.CreateDictionary(filepath)
 
-        for key in self.dictionary:
-            print(key, self.dictionary[key])
+        # for key in self.dictionary:
+        #     print(key, self.dictionary[key])
 
     def CreateDictionary(self, filepath):
         lookup = open(filepath, "r")
@@ -14,7 +14,7 @@ class SIConverter:
 
         lines = lookup.read().splitlines()
         for line in lines:
-            if(line[0] != "#")
+            if(line[0] != "#"):
                 line = line.replace(" ", "")
                 line = line.replace("\t", "")
                 buffer.append(line.split(";"))
@@ -70,13 +70,21 @@ class SIConverter:
             tvals = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
             best_unit_sivec = self.dictionary[record_unit]
 
-            min_val = 1000000
+            min_length = 1000000
             min_t = 1000000
 
             for t in tvals:
                 length_sq = 0
+
                 for i in range(len(best_unit_sivec)):
-                    length_sq = (si_rep_ints[i] - t*
+                    length_sq += (si_rep_ints[i] - t * best_unit_sivec[i])
+
+                if length_sq < min_length:
+                    min_t = t
+            
+            for i in range(len(best_unit_sivec)):
+                    si_rep_ints[i] = (si_rep_ints[i] - t * best_unit_sivec[i])
+                
 
                 
 
