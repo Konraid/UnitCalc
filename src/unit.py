@@ -93,7 +93,7 @@ class Unit:
             self.evaluate()
 
     @classmethod
-    def withRepresentation(cls, rep):
+    def with_representation(cls, rep):
         return cls("", rep, False)
 
     @classmethod
@@ -102,13 +102,12 @@ class Unit:
 
     @classmethod
     def identity(cls):
-        return cls("", [0,0,0,0,0,0,0])
+        return cls("", [0,0,0,0,0,0,0], False)
 
     def evaluate(self):
         if not hasattr(self, 'operator') or self.operator is None:
             # TODO GET SI REP
-            print(self.unit_text)
-            self.si_representation = SIConverter.getInstance().UnitToSI(self.unit_text)[2]
+            self.si_representation = SIConverter.getInstance().UnitToSI(self.unit_text)[1]
         else:
             self.term_a.evaluate()
             self.term_b.evaluate()
@@ -120,20 +119,26 @@ class Unit:
                 self.si_representation = self.term_a**float(self.term_b.unit_text)
 
     def __mul__(self, other):
-        return Unit.withRepresentation([x + y for x, y in zip(self.si_representation, other.si_representation)])
+        return Unit.with_representation([x + y for x, y in zip(self.si_representation, other.si_representation)])
 
     def __truediv__(self, other):
-        return Unit.withRepresentation([x - y for x, y in zip(self.si_representation, other.si_representation)])
+        return Unit.with_representation([x - y for x, y in zip(self.si_representation, other.si_representation)])
 
     def __eq__(self, other):
         return self.si_representation == other.si_representation
 
     def __pow__(self, other):
-        return Unit.withRepresentation([self.si_representation[i] * other for i in range(len(self.si_representation))])
+        return Unit.with_representation([self.si_representation[i] * other for i in range(len(self.si_representation))])
 
     def __str__(self):
-        return str(self.si_representation)
-        #return 'ich bin eine tolle einheit hihi'
+        l = self.si_representation
+        # [s, m, kg, A, K, mol, cd]
+        s = ""
+        units = ['s', 'm', 'kg', 'A', 'K', 'mol', 'cd']
+        for i in range(len(units)):
+            if l[i] != 0:
+                s += units[i] + '^' + str(l[i])
+        return s
 
 
 

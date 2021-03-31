@@ -100,7 +100,7 @@ class TermParser:
             # at this point there should be something like 2[N/m]
             if '[' in self.term_text:
                 self.value = float(self.term_text[:self.term_text.find('[')])
-                self.unit = Unit.with_string(self.term_text[self.term_text.find('[') + 1::-1], True)
+                self.unit = Unit.with_string(self.term_text[self.term_text.find('[') + 1:-1:], True)
             else:
                 self.value = float(self.term_text)
                 self.unit = Unit.identity()
