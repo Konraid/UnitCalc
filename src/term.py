@@ -3,26 +3,37 @@ import math
 
 class TermParser:
     def getIndexOutOfBrackets(self, symbol, string):
+
         bracket_counter = 0
+        hard_bracket_counter = 0
         for i in range(0, len(string)):
             s = string[i]
             if s == '(':
                 bracket_counter += 1
             elif s == ')':
                 bracket_counter -= 1
-            if s == symbol and bracket_counter == 0:
+            elif s == '[':
+                hard_bracket_counter += 1
+            elif s == ']':
+                hard_bracket_counter -= 1
+            if s == symbol and bracket_counter == 0 and hard_bracket_counter == 0:
                 return i
         return -1
 
     def checkNumOfBrackets(self, string):
         bracket_counter = 0
+        hard_bracket_counter = 0
         for i in range(0, len(string)):
             s = string[i]
             if s == '(':
                 bracket_counter += 1
             elif s == ')':
                 bracket_counter -= 1
-        return bracket_counter == 0
+            elif s == '[':
+                hard_bracket_counter += 1
+            elif s == ']':
+                hard_bracket_counter -= 1
+        return bracket_counter == 0 and hard_bracket_counter == 0
 
     def __init__(self, term_text):
         term_text = term_text.replace(' ', '')
@@ -74,13 +85,6 @@ class TermParser:
             self.term_b = TermParser(term_text[index + 1::])
             return
 
-        index = self.getIndexOutOfBrackets('^', term_text)
-        if index != -1:
-            self.operator = "^"
-            self.term_a = TermParser(term_text[0:index])
-            self.term_b = TermParser(term_text[index + 1::])
-            return
-
         index = self.getIndexOutOfBrackets('*', term_text)
         if index != -1:
             self.operator = "*"
@@ -95,9 +99,16 @@ class TermParser:
             self.term_b = TermParser(term_text[index + 1::])
             return
 
+        index = self.getIndexOutOfBrackets('^', term_text)
+        if index != -1:
+            self.operator = "^"
+            self.term_a = TermParser(term_text[0:index])
+            self.term_b = TermParser(term_text[index + 1::])
+            return
+
     def evaluate(self):
-        if not hasattr(self, 'operator'):
-            # at this point there should be something like 2[N/m]
+        if not hasattr(self, 'operator') or self.operator is None:
+            # at this point it should be something like 2[N/m]
             if '[' in self.term_text:
                 self.value = float(self.term_text[:self.term_text.find('[')])
                 self.unit = Unit.with_string(self.term_text[self.term_text.find('[') + 1:-1:], True)
@@ -129,5 +140,5 @@ class TermParser:
                 return self
             elif self.operator == '^':
                 self.value = math.pow(self.term_a.value, self.term_b.value)
-                self.unit = self.term_a.unit
+                self.unit = self.term_a.unit**self.term_b.value
                 return self

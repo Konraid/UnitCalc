@@ -53,13 +53,6 @@ class Unit:
         unit_text = unit_text.replace('**', '^')
         self.unit_text = unit_text
 
-        index = self.getIndexOutOfBrackets('^', unit_text)
-        if index != -1:
-            self.operator = "^"
-            self.term_a = Unit.with_string(unit_text[0:index])
-            self.term_b = Unit.with_string(unit_text[index + 1::])
-            return
-
         index = self.getIndexOutOfBrackets('*', unit_text)
         if index != -1:
             self.operator = "*"
@@ -70,6 +63,13 @@ class Unit:
         index = self.getIndexOutOfBrackets('/', unit_text)
         if index != -1:
             self.operator = "/"
+            self.term_a = Unit.with_string(unit_text[0:index])
+            self.term_b = Unit.with_string(unit_text[index + 1::])
+            return
+
+        index = self.getIndexOutOfBrackets('^', unit_text)
+        if index != -1:
+            self.operator = "^"
             self.term_a = Unit.with_string(unit_text[0:index])
             self.term_b = Unit.with_string(unit_text[index + 1::])
             return
@@ -107,16 +107,19 @@ class Unit:
     def evaluate(self):
         if not hasattr(self, 'operator') or self.operator is None:
             # TODO GET SI REP
-            self.si_representation = SIConverter.getInstance().UnitToSI(self.unit_text)[1]
+            try:
+                i = int(self.unit_text)
+            except ValueError:
+                self.si_representation = SIConverter.getInstance().UnitToSI(self.unit_text)[1]
         else:
             self.term_a.evaluate()
             self.term_b.evaluate()
             if self.operator == '*':
                 self.si_representation = (self.term_a * self.term_b).si_representation
             elif self.operator == '/':
-                self.si_representation = self.term_a / self.term_b
+                self.si_representation = (self.term_a / self.term_b).si_representation
             elif self.operator == '^':
-                self.si_representation = self.term_a**float(self.term_b.unit_text)
+                self.si_representation = (self.term_a**float(self.term_b.unit_text)).si_representation
 
     def __mul__(self, other):
         return Unit.with_representation([x + y for x, y in zip(self.si_representation, other.si_representation)])
@@ -137,7 +140,12 @@ class Unit:
         units = ['s', 'm', 'kg', 'A', 'K', 'mol', 'cd']
         for i in range(len(units)):
             if l[i] != 0:
-                s += units[i] + '^' + str(l[i])
+                x = l[i]
+                if int(x) - x == 0:
+                    x = int(x)
+                s += units[i] + "^(" + str(x) + ")*"
+        if s.endswith('*'):
+            s = s[:-1:]
         return s
 
 
