@@ -101,7 +101,7 @@ class Unit:
                 pass
 
     def __mul__(self, other):
-        return Unit([x + y for x, y in zip(self, other)])
+        return Unit([x + y for x, y in zip(self.si_representation, other.si_representation)])
 
     def __truediv__(self, other):
         # TODO
