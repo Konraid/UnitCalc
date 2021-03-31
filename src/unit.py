@@ -89,6 +89,7 @@ class Unit:
         self.si_representation = rep
         if not rep:
             self.parse(unit_text)
+            self.si_representation = [0,0,0,0,0,0,0]
         if eval:
             self.evaluate()
 
