@@ -3,7 +3,8 @@
 from term import TermParser
 
 #input_string = str(input("Enter units: "))
-input_string = '(2[kg]^4[kg]) / (3 [kg] + 7 [kg])'
+input_string = '(2[kg]**4[kg]) / (3 [kg] + 7 [kg])'
+input_string = '(2[kg]**4[kg]) / (3 [kg] + 7 [kg])'
 base_term = TermParser(input_string)
 base_term.evaluate()
 

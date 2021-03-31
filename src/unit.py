@@ -1,5 +1,7 @@
 
 class Unit:
+
+    # region Parser
     def getIndexOutOfBrackets(self, symbol, string):
         bracket_counter = 0
         for i in range(0, len(string)):
@@ -22,15 +24,13 @@ class Unit:
                 bracket_counter -= 1
         return bracket_counter == 0
 
-    def __init__(self, unit_text):
-        unit_text = unit_text.replace(' ', '')
-
+    def parse(self, unit_text):
         # check for correct use of parentheses
         if not self.checkNumOfBrackets(unit_text):
             print('[ERROR] Opening Brackets are not matching closing ones')
             return
 
-        # remove redundant parentheses
+        # region remove redundant parentheses
         bracket_counter = 1
         remove_brackets = False
         if unit_text.startswith('(') and unit_text.endswith(')'):
@@ -41,11 +41,12 @@ class Unit:
                     bracket_counter += 1
                 elif s == ')':
                     bracket_counter -= 1
-                if bracket_counter <= 0 and i <len(unit_text) -1:
+                if bracket_counter <= 0 and i < len(unit_text) - 1:
                     remove_brackets = False
                     break
-        if(remove_brackets):
+        if (remove_brackets):
             unit_text = unit_text[1:-1]
+        # endregion
 
         unit_text = unit_text.replace('**', '^')
         self.unit_text = unit_text
@@ -53,25 +54,42 @@ class Unit:
         index = self.getIndexOutOfBrackets('*', unit_text)
         if index != -1:
             self.operator = "*"
-            self.termA = Unit(unit_text[0:index])
-            self.termB = Unit(unit_text[index + 1::])
+            self.term_a = Unit(unit_text[0:index])
+            self.term_b = Unit(unit_text[index + 1::])
             return
 
         index = self.getIndexOutOfBrackets('/', unit_text)
         if index != -1:
             self.operator = "/"
-            self.termA = Unit(unit_text[0:index])
-            self.termB = Unit(unit_text[index + 1::])
+            self.term_a = Unit(unit_text[0:index])
+            self.term_b = Unit(unit_text[index + 1::])
             return
 
         index = self.getIndexOutOfBrackets('^', unit_text)
         if index != -1:
             self.operator = "^"
-            self.termA = Unit(unit_text[0:index])
-            self.termB = Unit(unit_text[index + 1::])
+            self.term_a = Unit(unit_text[0:index])
+            self.term_b = Unit(unit_text[index + 1::])
             return
 
-    # ((T+Si+K/F) +  =m*(A-b)/c - T))
+    # endregion
+
+    def __init__(self, unit_text):
+        unit_text = unit_text.replace(' ', '')
+
+        # definition of members
+        self.unit_text = None
+        self.operator = None
+        self.term_a = None
+        self.term_b = None
+
+        # [s, m, kg, A, mol, cd]
+        self.si_representation = []
+
+        self.parse(unit_text)
+
+    def __init__(self, si_representation):
+        self.si_representation = si_representation
 
     def evaluate(self):
         if not self.operator:
@@ -83,8 +101,7 @@ class Unit:
                 pass
 
     def __mul__(self, other):
-        # TODO
-        return self
+        return Unit([x + y for x, y in zip(self, other)])
 
     def __truediv__(self, other):
         # TODO
