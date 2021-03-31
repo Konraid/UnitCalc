@@ -102,7 +102,7 @@ class SIConverter:
 
         if(foundSolution):
             return solution
-        else
+        else:
             return si_rep_ints
             
                 
