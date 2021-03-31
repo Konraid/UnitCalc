@@ -1,0 +1,9 @@
+Unit    ;Name       ;SI-exponents(s,m,kg,A,K,mol,cd)
+s       ;Sekunden   ; 1, 0, 0, 0, 0, 0, 0
+m       ;Meter      ; 0, 1, 0, 0, 0, 0, 0
+kg      ;Kilogramm  ; 0, 0, 1, 0, 0, 0, 0
+A       ;Ampere     ; 0, 0, 0, 1, 0, 0, 0
+K       ;Kelvin     ; 0, 0, 0, 0, 1, 0, 0
+mol     ;mol        ; 0, 0, 0, 0, 0, 1, 0
+cd      ;Candela    ; 0, 0, 0, 0, 0, 0, 1
+N       ;Newton     ;-2, 1, 1, 0, 0, 0, 0
