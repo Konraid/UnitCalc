@@ -1,6 +1,5 @@
 
-class UnitTerm:
-
+class Unit:
     def getIndexOutOfBrackets(self, symbol, string):
         bracket_counter = 0
         for i in range(0, len(string)):
@@ -24,8 +23,6 @@ class UnitTerm:
         return bracket_counter == 0
 
     def __init__(self, unit_text):
-        #print("Created new Term with text", term_text)
-
         unit_text = unit_text.replace(' ', '')
 
         # check for correct use of parentheses
@@ -53,42 +50,25 @@ class UnitTerm:
         unit_text = unit_text.replace('**', '^')
         self.unit_text = unit_text
 
-
-        index = self.getIndexOutOfBrackets('+', unit_text)
-        if index != -1:
-
-            self.operator = "+"
-            self.termA = UnitTerm(unit_text[0:index])
-            self.termB = UnitTerm(unit_text[index + 1::])
-            return
-
-        index = self.getIndexOutOfBrackets('-', unit_text)
-        if index != -1:
-
-            self.operator = "-"
-            self.termA = UnitTerm(unit_text[0:index])
-            self.termB = UnitTerm(unit_text[index + 1::])
-            return
-
         index = self.getIndexOutOfBrackets('*', unit_text)
         if index != -1:
             self.operator = "*"
-            self.termA = UnitTerm(unit_text[0:index])
-            self.termB = UnitTerm(unit_text[index + 1::])
+            self.termA = Unit(unit_text[0:index])
+            self.termB = Unit(unit_text[index + 1::])
             return
 
         index = self.getIndexOutOfBrackets('/', unit_text)
         if index != -1:
             self.operator = "/"
-            self.termA = UnitTerm(unit_text[0:index])
-            self.termB = UnitTerm(unit_text[index + 1::])
+            self.termA = Unit(unit_text[0:index])
+            self.termB = Unit(unit_text[index + 1::])
             return
 
         index = self.getIndexOutOfBrackets('^', unit_text)
         if index != -1:
             self.operator = "^"
-            self.termA = UnitTerm(unit_text[0:index])
-            self.termB = UnitTerm(unit_text[index + 1::])
+            self.termA = Unit(unit_text[0:index])
+            self.termB = Unit(unit_text[index + 1::])
             return
 
     # ((T+Si+K/F) +  =m*(A-b)/c - T))
@@ -97,19 +77,10 @@ class UnitTerm:
         if not self.operator:
             return self.unit_text
         else:
-            if self.operator == '+' or self.operator == '-':
-                unit_A = self.termA.evaluate()
-                unit_B = self.termB.evaluate()
-                if(unit_A == unit_B):
-                    return unit_A
-                else:
-                    print('[ERROR] Units do not match in sum')
-                    print('>>', self.unit_text)
-            elif self.operator == '*':
-                unit_A = 'm'
-                unit_B = 'm^2'
-
-
+            if self.operator == '*':
+                pass
+            elif self.operator == '/':
+                pass
 
     def __mul__(self, other):
         # TODO

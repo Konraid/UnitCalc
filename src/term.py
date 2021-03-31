@@ -1,6 +1,5 @@
-from unitTerm import UnitTerm
+from unit import Unit
 
-#Kommentar
 
 class TermParser:
     def getIndexOutOfBrackets(self, symbol, string):
@@ -101,7 +100,7 @@ class TermParser:
             # at this point there should be something like 2[N/m]
             if '[' in self.term_text:
                 self.value = float(self.term_text[:self.term_text.find('[')])
-                self.unit = UnitTerm(self.term_text[self.term_text.find('[')+1::-1])
+                self.unit = Unit(self.term_text[self.term_text.find('[') + 1::-1])
             else:
                 self.value = float(self.term_text)
                 # TODO identity unit
@@ -129,3 +128,5 @@ class TermParser:
                 self.value = self.term_a.value / self.term_b.value
                 self.unit = self.term_a.unit / self.term_b.unit
                 return self
+            elif self.operator == '^':
+                self.value = self.term_a.value
