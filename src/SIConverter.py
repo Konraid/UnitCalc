@@ -60,7 +60,8 @@ class SIConverter:
 
         foundSolution = False
         solution = []
-        maxTries = 5
+        maxTries = max_tries
+        si_rep_ints_copy = copy.deepcopy(si_rep_ints)
 
         #MAXTRIES VERSUCHE, "PASSENDERE" EINHEITEN ZU FINDEN, BEVOR SI-DARSTELLUNG VERWENDET WIRD
         for attempt in range(maxTries):            
@@ -83,13 +84,14 @@ class SIConverter:
 
                 #SKALARPRODUKT BERECHNEN
                 for i in range(len(si_vec)):
-                    dotprod += si_vec_norm[i] * si_rep_ints[i]
+                    dotprod += si_vec_norm[i] * si_rep_ints_copy[i]
 
                 if abs(dotprod) > record_val:
                     record_val = abs(dotprod)
                     record_unit = unit
 
             #MINIMIERE DEN RESTLICHEN DARZUSTELLENDEN VEKTOR
+            #TODO: NICHT WIEDERHOLT (BEI UNTERSCHIEDLICHEN "ATTEMPTS" DIESELBE EINHEIT 0-MAL ABZIEHEN)
             record_unit_sivec = self.dictionary[record_unit][1]
 
             min_length = 1000000
@@ -99,21 +101,21 @@ class SIConverter:
                 length_sq = 0
 
                 for i in range(len(record_unit_sivec)):
-                    length_sq += (si_rep_ints[i] - t * record_unit_sivec[i])**2
+                    length_sq += (si_rep_ints_copy[i] - t * record_unit_sivec[i])**2
 
                 if length_sq < min_length:
                     min_t = t
                     min_length = length_sq
             
             for i in range(len(record_unit_sivec)):
-                    si_rep_ints[i] = (si_rep_ints[i] - min_t * record_unit_sivec[i])
+                    si_rep_ints_copy[i] = (si_rep_ints_copy[i] - min_t * record_unit_sivec[i])
         
             #FÜGE ENTSPRECHENDE EINHEIT ZUM LÖSUNGSVEKTOR HINZU
             solution.append("(" + record_unit + ")^" + str(min_t))
 
             #TESTE, OB RESTVEKTOR BEREITS 0 IST
             isZero = True
-            for val in si_rep_ints:
+            for val in si_rep_ints_copy:
                 if val != 0:
                     isZero = False
             if(isZero):
