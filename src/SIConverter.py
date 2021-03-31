@@ -1,6 +1,20 @@
 class SIConverter:
 
-    def __init__(self, filepath):
+    __instance = None
+
+    @staticmethod
+    def getInstance():
+        if SIConverter.__instance is None:
+            SIConverter()
+        return SIConverter.__instance
+
+    def __init__(self):
+        if SIConverter.__instance != None:
+            raise Exception("This class is a singleton!")
+        else:
+            SIConverter.__instance = self
+
+        filepath = 'UnitsSI.txt'
         self.dictionary = self.CreateDictionary(filepath)
 
         # for key in self.dictionary:

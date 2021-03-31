@@ -1,3 +1,5 @@
+from SIConverter import SIConverter
+
 
 class Unit:
 
@@ -105,7 +107,8 @@ class Unit:
     def evaluate(self):
         if not hasattr(self, 'operator') or self.operator is None:
             # TODO GET SI REP
-            self.si_representation = [2, 1, 1, 1, 1, 1, 1]
+            print(self.unit_text)
+            self.si_representation = SIConverter.getInstance().UnitToSI(self.unit_text)[2]
         else:
             self.term_a.evaluate()
             self.term_b.evaluate()
