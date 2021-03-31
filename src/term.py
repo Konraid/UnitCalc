@@ -74,6 +74,13 @@ class TermParser:
             self.term_b = TermParser(term_text[index + 1::])
             return
 
+        index = self.getIndexOutOfBrackets('^', term_text)
+        if index != -1:
+            self.operator = "^"
+            self.term_a = TermParser(term_text[0:index])
+            self.term_b = TermParser(term_text[index + 1::])
+            return
+
         index = self.getIndexOutOfBrackets('*', term_text)
         if index != -1:
             self.operator = "*"
@@ -88,23 +95,15 @@ class TermParser:
             self.term_b = TermParser(term_text[index + 1::])
             return
 
-        index = self.getIndexOutOfBrackets('^', term_text)
-        if index != -1:
-            self.operator = "^"
-            self.term_a = TermParser(term_text[0:index])
-            self.term_b = TermParser(term_text[index + 1::])
-            return
-
     def evaluate(self):
         if not hasattr(self, 'operator'):
             # at this point there should be something like 2[N/m]
             if '[' in self.term_text:
                 self.value = float(self.term_text[:self.term_text.find('[')])
-                self.unit = Unit(self.term_text[self.term_text.find('[') + 1::-1])
+                self.unit = Unit.with_string(self.term_text[self.term_text.find('[') + 1::-1], True)
             else:
                 self.value = float(self.term_text)
-                # TODO identity unit
-                self.unit = None
+                self.unit = Unit.identity()
             return self
         else:
             self.term_a.evaluate()

@@ -51,30 +51,30 @@ class Unit:
         unit_text = unit_text.replace('**', '^')
         self.unit_text = unit_text
 
+        index = self.getIndexOutOfBrackets('^', unit_text)
+        if index != -1:
+            self.operator = "^"
+            self.term_a = Unit.with_string(unit_text[0:index])
+            self.term_b = Unit.with_string(unit_text[index + 1::])
+            return
+
         index = self.getIndexOutOfBrackets('*', unit_text)
         if index != -1:
             self.operator = "*"
-            self.term_a = Unit(unit_text[0:index])
-            self.term_b = Unit(unit_text[index + 1::])
+            self.term_a = Unit.with_string(unit_text[0:index])
+            self.term_b = Unit.with_string(unit_text[index + 1::])
             return
 
         index = self.getIndexOutOfBrackets('/', unit_text)
         if index != -1:
             self.operator = "/"
-            self.term_a = Unit(unit_text[0:index])
-            self.term_b = Unit(unit_text[index + 1::])
-            return
-
-        index = self.getIndexOutOfBrackets('^', unit_text)
-        if index != -1:
-            self.operator = "^"
-            self.term_a = Unit(unit_text[0:index])
-            self.term_b = Unit(unit_text[index + 1::])
+            self.term_a = Unit.with_string(unit_text[0:index])
+            self.term_b = Unit.with_string(unit_text[index + 1::])
             return
 
     # endregion
 
-    def __init__(self, unit_text):
+    def __init__(self, unit_text, rep, eval):
         unit_text = unit_text.replace(' ', '')
 
         # definition of members
@@ -83,37 +83,54 @@ class Unit:
         self.term_a = None
         self.term_b = None
 
-        # [s, m, kg, A, mol, cd]
-        self.si_representation = []
+        # [s, m, kg, A, K, mol, cd]
+        self.si_representation = rep
+        if not rep:
+            self.parse(unit_text)
+        if eval:
+            self.evaluate()
 
-        self.parse(unit_text)
+    @classmethod
+    def withRepresentation(cls, rep):
+        return cls("", rep, False)
 
-    def __init__(self, si_representation):
-        self.si_representation = si_representation
+    @classmethod
+    def with_string(cls, unit_text, eval=False):
+        return cls(unit_text, [], eval)
+
+    @classmethod
+    def identity(cls):
+        return cls("", [0,0,0,0,0,0,0])
 
     def evaluate(self):
-        if not self.operator:
-            return self.unit_text
+        if not hasattr(self, 'operator') or self.operator is None:
+            # TODO GET SI REP
+            self.si_representation = [2, 1, 1, 1, 1, 1, 1]
         else:
+            self.term_a.evaluate()
+            self.term_b.evaluate()
             if self.operator == '*':
-                pass
+                self.si_representation = (self.term_a * self.term_b).si_representation
             elif self.operator == '/':
-                pass
+                self.si_representation = self.term_a / self.term_b
+            elif self.operator == '^':
+                self.si_representation = self.term_a**float(self.term_b.unit_text)
 
     def __mul__(self, other):
-        return Unit([x + y for x, y in zip(self.si_representation, other.si_representation)])
+        return Unit.withRepresentation([x + y for x, y in zip(self.si_representation, other.si_representation)])
 
     def __truediv__(self, other):
-        # TODO
-        return self
+        return Unit.withRepresentation([x - y for x, y in zip(self.si_representation, other.si_representation)])
 
     def __eq__(self, other):
-        # TODO
-        return True
+        return self.si_representation == other.si_representation
+
+    def __pow__(self, other):
+        return Unit.withRepresentation([self.si_representation[i] * other for i in range(len(self.si_representation))])
 
     def __str__(self):
-        # TODO
-        return 'ich bin eine tolle einheit hihi'
+        return str(self.si_representation)
+        #return 'ich bin eine tolle einheit hihi'
 
 
 
