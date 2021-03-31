@@ -100,7 +100,7 @@ class SIConverter:
                 foundSolution = True
                 break
 
-        if(foundSolution)
+        if(foundSolution):
             return solution
         else
             return si_rep_ints
