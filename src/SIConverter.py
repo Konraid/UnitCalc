@@ -41,12 +41,14 @@ class SIConverter:
         """
 
         si_rep_ints = []
-        si_rep_string = row[2].split(",")
+        si_rep_string = si_rep_string.replace(" ", "")
+        si_rep_string_list = si_rep_string.split(",")
 
-        for string_val in si_rep_string:
+        for string_val in si_rep_string_list:
             si_rep_ints.append(int(string_val))
 
-        solutions = []
+        foundSolution = False
+        solution = []
         maxTries = 5
 
         #MAXTRIES VERSUCHE, "PASSENDERE" EINHEITEN ZU FINDEN, BEVOR SI-DARSTELLUNG VERWENDET WIRD
@@ -57,7 +59,7 @@ class SIConverter:
             #FINDE AM BESTEN PASSENDSTE EINHEIT
             for unit in self.dictionary:
                 dotprod = 0
-                si_vec = self.dictionary[unit]
+                si_vec = self.dictionary[unit][1]
 
                 for i in range(len(si_vec)):
                     dotprod += si_vec[i] * si_rep_ints[i]
@@ -68,7 +70,7 @@ class SIConverter:
 
             #MINIMIERE DEN RESTLICHEN DARZUSTELLENDEN VEKTOR
             tvals = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
-            best_unit_sivec = self.dictionary[record_unit]
+            record_unit_sivec = self.dictionary[record_unit][1]
 
             min_length = 1000000
             min_t = 1000000
@@ -76,14 +78,33 @@ class SIConverter:
             for t in tvals:
                 length_sq = 0
 
-                for i in range(len(best_unit_sivec)):
-                    length_sq += (si_rep_ints[i] - t * best_unit_sivec[i])
+                for i in range(len(record_unit_sivec)):
+                    length_sq += (si_rep_ints[i] - t * record_unit_sivec[i])**2
 
                 if length_sq < min_length:
                     min_t = t
+                    min_length = length_sq
             
-            for i in range(len(best_unit_sivec)):
-                    si_rep_ints[i] = (si_rep_ints[i] - t * best_unit_sivec[i])
+            for i in range(len(record_unit_sivec)):
+                    si_rep_ints[i] = (si_rep_ints[i] - min_t * record_unit_sivec[i])
+        
+            #FÜGE ENTSPRECHENDE EINHEIT ZUM LÖSUNGSVEKTOR HINZU
+            solution.append("(" + record_unit + ")^" + str(min_t))
+
+            #TESTE, OB RESTVEKTOR BEREITS 0 IST
+            isZero = True
+            for val in si_rep_ints:
+                if val != 0:
+                    isZero = False
+            if(isZero):
+                foundSolution = True
+                break
+
+        if(foundSolution)
+            return solution
+        else
+            return si_rep_ints
+            
                 
 
                 
