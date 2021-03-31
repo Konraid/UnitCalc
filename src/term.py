@@ -1,6 +1,5 @@
 from unitTerm import UnitTerm
 
-
 class TermParser:
     def getIndexOutOfBrackets(self, symbol, string):
         bracket_counter = 0
