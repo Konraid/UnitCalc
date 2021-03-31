@@ -94,12 +94,9 @@ class TermParser:
             self.term_b = TermParser(term_text[index + 1::])
             return
 
-    # (1[kg] + 2 [kg]) / 3 [kg]
-
     def evaluate(self):
         if not hasattr(self, 'operator'):
             # at this point there should be something like 2[N/m]
-            print(self.term_text)
             if '[' in self.term_text:
                 self.value = float(self.term_text[:self.term_text.find('[')])
                 self.unit = UnitTerm(self.term_text[self.term_text.find('[')+1::-1])
