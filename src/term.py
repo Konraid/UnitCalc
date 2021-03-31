@@ -3,7 +3,9 @@ import math
 
 class TermParser:
     def getIndexOutOfBrackets(self, symbol, string):
-
+        """
+        finds index of a symbol (-->operator) outside of a (...)-context
+        """
         bracket_counter = 0
         hard_bracket_counter = 0
         for i in range(0, len(string)):
@@ -37,19 +39,22 @@ class TermParser:
 
     def __init__(self, term_text):
         term_text = term_text.replace(' ', '')
+        term_text = term_text.replace('**', '^')
 
-        # region definition of members
-        self.unit = None
+        # region MEMBER DEFINITION
+        self.unit = None 
         self.value = None
         self.term_text = None
-        # endregion
+        self.operator = None
+        #endregion
 
-        # check for correct use of parentheses
+        # region KLAMMERSETZUNG PRÜFEN
         if not self.checkNumOfBrackets(term_text):
             print('[ERROR] Opening Brackets are not matching closing ones')
             return
+        #endregion
 
-        # region remove redundant parentheses
+        # region ÜBERFLÜSSIGE KLAMMERN ENTFERNEN
         bracket_counter = 1
         remove_brackets = False
         if term_text.startswith('(') and term_text.endswith(')'):
@@ -67,56 +72,57 @@ class TermParser:
             term_text = term_text[1:-1]
         # endregion
 
-        term_text = term_text.replace('**', '^')
-        self.term_text = term_text
-
+        # region (SUB)TERME UNTERSCHEIDEN
+        #PUNKT VOR STRICH --> INNERSTE STRUKTUREN SIND PRODUKTE/QUOTIENTEN/...
         index = self.getIndexOutOfBrackets('+', term_text)
         if index != -1:
             self.operator = "+"
             self.term_a = TermParser(term_text[0:index])
             self.term_b = TermParser(term_text[index + 1::])
-            return
+        else:
+            index = self.getIndexOutOfBrackets('-', term_text)
+            if index != -1:
+                self.operator = "-"
+                self.term_a = TermParser(term_text[0:index])
+                self.term_b = TermParser(term_text[index + 1::])
+            else:
+                index = self.getIndexOutOfBrackets('*', term_text)
+                if index != -1:
+                    self.operator = "*"
+                    self.term_a = TermParser(term_text[0:index])
+                    self.term_b = TermParser(term_text[index + 1::])
+                else:
+                    index = self.getIndexOutOfBrackets('/', term_text)
+                    if index != -1:
+                        self.operator = "/"
+                        self.term_a = TermParser(term_text[0:index])
+                        self.term_b = TermParser(term_text[index + 1::])
+                    else:
+                        index = self.getIndexOutOfBrackets('^', term_text)
+                        if index != -1:
+                            self.operator = "^"
+                            self.term_a = TermParser(term_text[0:index])
+                            self.term_b = TermParser(term_text[index + 1::])
+        #endregion
 
-        index = self.getIndexOutOfBrackets('-', term_text)
-        if index != -1:
+        self.term_text = term_text
+        self.evaluate()
 
-            self.operator = "-"
-            self.term_a = TermParser(term_text[0:index])
-            self.term_b = TermParser(term_text[index + 1::])
-            return
-
-        index = self.getIndexOutOfBrackets('*', term_text)
-        if index != -1:
-            self.operator = "*"
-            self.term_a = TermParser(term_text[0:index])
-            self.term_b = TermParser(term_text[index + 1::])
-            return
-
-        index = self.getIndexOutOfBrackets('/', term_text)
-        if index != -1:
-            self.operator = "/"
-            self.term_a = TermParser(term_text[0:index])
-            self.term_b = TermParser(term_text[index + 1::])
-            return
-
-        index = self.getIndexOutOfBrackets('^', term_text)
-        if index != -1:
-            self.operator = "^"
-            self.term_a = TermParser(term_text[0:index])
-            self.term_b = TermParser(term_text[index + 1::])
-            return
-
+    # ERZEUGE INHALT  
     def evaluate(self):
         if not hasattr(self, 'operator') or self.operator is None:
-            # at this point it should be something like 2[N/m]
+            # region INNERSTE/UNTERSTE STUFE ERREICHT, term = value[unit]
             if '[' in self.term_text:
-                self.value = float(self.term_text[:self.term_text.find('[')])
-                self.unit = Unit.with_string(self.term_text[self.term_text.find('[') + 1:-1:], True)
+                unit_starts = self.term_text.find('[')
+                self.value = float(self.term_text[:unit_starts])
+                self.unit = Unit.from_string(self.term_text[unit_starts + 1:-1:])
             else:
                 self.value = float(self.term_text)
                 self.unit = Unit.identity()
             return self
+            # endregion
         else:
+            # region BESTIMME TERM AUS SUBTERMEN
             self.term_a.evaluate()
             self.term_b.evaluate()
             if self.operator == '+' or self.operator == '-':
@@ -130,6 +136,8 @@ class TermParser:
                 else:
                     print('[ERROR] Units do not match in sum.')
                     print('>>', self.term_text)
+                    self.value = 0
+                    self.unit = Unit.identity()
             elif self.operator == '*':
                 self.value = self.term_a.value * self.term_b.value
                 self.unit = self.term_a.unit * self.term_b.unit
@@ -139,6 +147,13 @@ class TermParser:
                 self.unit = self.term_a.unit / self.term_b.unit
                 return self
             elif self.operator == '^':
-                self.value = math.pow(self.term_a.value, self.term_b.value)
-                self.unit = self.term_a.unit**self.term_b.value
+                if self.term_b.unit == Unit.identity():
+                    self.value = math.pow(self.term_a.value, self.term_b.value)
+                    self.unit = self.term_a.unit**self.term_b.value
+                else:
+                    print('[ERROR] Exponents cant have units.')
+                    print('>>', self.term_text)
+                    self.value = 0
+                    self.unit = Unit.identity()
                 return self
+            # endregion
