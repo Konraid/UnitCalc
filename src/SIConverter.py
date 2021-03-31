@@ -51,19 +51,12 @@ class SIConverter:
     def UnitToSI(self, unit_string):
         return self.dictionary[unit_string]
 
-    def SIToUnit(self, si_rep_string, max_tries, max_exponent):
+    def SIToUnit(self, si_rep_ints, max_tries, max_exponent):
         """
-        si_rep_string: comma-separated exponents of si-units (s,m,kg,A,K,mol,cd)
+        si_rep_ints: list of int exponents (s,m,kg,A,K,mol,cd)
         max_tries: maximum number of different "base" units
         max_exponent: highest absolute exponent value (eg. m⁴)
         """
-
-        si_rep_ints = []
-        si_rep_string = si_rep_string.replace(" ", "")
-        si_rep_string_list = si_rep_string.split(",")
-
-        for string_val in si_rep_string_list:
-            si_rep_ints.append(int(string_val))
 
         foundSolution = False
         solution = []
