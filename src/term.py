@@ -1,5 +1,5 @@
 from unit import Unit
-
+import math
 
 class TermParser:
     def getIndexOutOfBrackets(self, symbol, string):
@@ -129,4 +129,6 @@ class TermParser:
                 self.unit = self.term_a.unit / self.term_b.unit
                 return self
             elif self.operator == '^':
-                self.value = self.term_a.value
+                self.value = math.pow(self.term_a.value, self.term_b.value)
+                self.unit = self.term_a.unit
+                return self
