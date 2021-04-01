@@ -59,9 +59,17 @@ class SIConverter:
         """
 
         foundSolution = False
-        solution = []
+        solution = ""
         maxTries = max_tries
         si_rep_ints_copy = copy.deepcopy(si_rep_ints)
+        
+        #TESTE, OB IDENTITÄTS-EINHEIT VORLIEGT
+        skip_the_whole_thing = True
+        for val in si_rep_ints_copy:
+            if val != 0:
+                skip_the_whole_thing = False
+        if(skip_the_whole_thing):
+            return ""
 
         #MAXTRIES VERSUCHE, "PASSENDERE" EINHEITEN ZU FINDEN, BEVOR SI-DARSTELLUNG VERWENDET WIRD
         for attempt in range(maxTries):            
@@ -111,7 +119,7 @@ class SIConverter:
                     si_rep_ints_copy[i] = (si_rep_ints_copy[i] - min_t * record_unit_sivec[i])
         
             #FÜGE ENTSPRECHENDE EINHEIT ZUM LÖSUNGSVEKTOR HINZU
-            solution.append("(" + record_unit + ")^" + str(min_t))
+            solution += " * " + record_unit + "^(" + str(min_t) + ")"
 
             #TESTE, OB RESTVEKTOR BEREITS 0 IST
             isZero = True
@@ -123,7 +131,7 @@ class SIConverter:
                 break
 
         if(foundSolution):
-            return solution
+            return solution[3::]
         else:
             return si_rep_ints
             
