@@ -47,21 +47,23 @@ class Unit:
                 # endregion
 
                 # region ÜBERFLÜSSIGE KLAMMERN ENTFERNEN
-                bracket_counter = 1
-                remove_brackets = False
-                if unit_text.startswith('(') and unit_text.endswith(')'):
-                    remove_brackets = True
-                    for i in range(1, len(unit_text)):
-                        s = unit_text[i]
-                        if s == '(':
-                            bracket_counter += 1
-                        elif s == ')':
-                            bracket_counter -= 1
-                        if bracket_counter <= 0 and i < len(unit_text) - 1:
-                            remove_brackets = False
-                            break
-                if (remove_brackets):
-                    unit_text = unit_text[1:-1]
+                remove_brackets = True
+                while(remove_brackets):
+                    remove_brackets = False
+                    bracket_counter = 1
+                    if unit_text.startswith('(') and unit_text.endswith(')'):
+                        remove_brackets = True
+                        for i in range(1, len(unit_text)):
+                            s = unit_text[i]
+                            if s == '(':
+                                bracket_counter += 1
+                            elif s == ')':
+                                bracket_counter -= 1
+                            if bracket_counter <= 0 and i <len(unit_text) -1:
+                                remove_brackets = False
+                                break
+                    if(remove_brackets):
+                        unit_text = unit_text[1:-1]
                 # endregion
 
                 # region (SUB)UNITS UNTERSCHEIDEN
@@ -161,10 +163,8 @@ class Unit:
                 x = l[i]
                 if int(x) - x == 0:
                     x = int(x)
-                s += units[i] + "^(" + str(x) + ")*"
-        if s.endswith('*'):
-            s = s[:-1:]
-        return s
+                s += " * " +units[i] + "^(" + str(x) + ")"
+        return s[3::]
     # endregion
 
 
