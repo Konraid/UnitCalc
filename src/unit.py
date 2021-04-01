@@ -94,7 +94,7 @@ class Unit:
         else:
             if rep != None:
                 self.si_representation = rep
-                #ToDo: TEXT ERZEUGEN AUS REP
+                #TODO: TEXT ERZEUGEN AUS REP
             else:
                 print("[Error] unit_text and rep both set to None")
 
@@ -103,11 +103,13 @@ class Unit:
         if self.si_representation == None:
             if not hasattr(self, 'operator') or self.operator is None:
                 # region INNERSTE STUFE
-                # BUGFIX, KEINE AHNUNG WARUM MAN HIER si_representation manuell setzen muss
+                # FALLS unit_text ALS int INTERPRETIERT WERDEN KANN (Z.B. '1' in [1/m]),
+                #   LIEGT KEINE "ECHTE" EINHEIT VOR
                 self.si_representation = [0,0,0,0,0,0,0]
                 try:
                     i = int(self.unit_text)
                 except ValueError:
+                    # FALLS INTERPRETATION ALS int FEHLSCHLÄGT, WERTE unit_text MITTELS TABELLE AUS
                     self.si_representation = SIConverter.getInstance().UnitToSI(self.unit_text)[1]
                 # endregion
             else:
