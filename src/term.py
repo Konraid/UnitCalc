@@ -55,21 +55,23 @@ class TermParser:
         #endregion
 
         # region ÜBERFLÜSSIGE KLAMMERN ENTFERNEN
-        bracket_counter = 1
-        remove_brackets = False
-        if term_text.startswith('(') and term_text.endswith(')'):
-            remove_brackets = True
-            for i in range(1, len(term_text)):
-                s = term_text[i]
-                if s == '(':
-                    bracket_counter += 1
-                elif s == ')':
-                    bracket_counter -= 1
-                if bracket_counter <= 0 and i <len(term_text) -1:
-                    remove_brackets = False
-                    break
-        if(remove_brackets):
-            term_text = term_text[1:-1]
+        remove_brackets = True
+        while(remove_brackets):
+            remove_brackets = False
+            bracket_counter = 1
+            if term_text.startswith('(') and term_text.endswith(')'):
+                remove_brackets = True
+                for i in range(1, len(term_text)):
+                    s = term_text[i]
+                    if s == '(':
+                        bracket_counter += 1
+                    elif s == ')':
+                        bracket_counter -= 1
+                    if bracket_counter <= 0 and i <len(term_text) -1:
+                        remove_brackets = False
+                        break
+            if(remove_brackets):
+                term_text = term_text[1:-1]
         # endregion
 
         # region (SUB)TERME UNTERSCHEIDEN
