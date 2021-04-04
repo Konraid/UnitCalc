@@ -17,8 +17,8 @@ class ConstantsDict:
         filepath = 'Constants.txt'
         self.dictionary = self.CreateDictionary(filepath)
 
-        for key in self.dictionary:
-            print(key, self.dictionary[key])
+        # for key in self.dictionary:
+        #     print(key, self.dictionary[key])
 
     def CreateDictionary(self, filepath):
         lookup = open(filepath, "r")
@@ -39,7 +39,7 @@ class ConstantsDict:
 
         return dictionary
 
-    def LookupConst(text):
+    def LookupConst(self, text):
         """
         in:
             text - string containing the constant to evaluate
@@ -49,3 +49,11 @@ class ConstantsDict:
             value - float with numeric value of constant
             unit_str - string to pass into unit.from_string()
         """
+
+        value = float(self.dictionary[text][1])
+        unit_str = self.dictionary[text][2]
+
+        if unit_str == "1":
+            unit_str = ""
+
+        return (value, unit_str)
