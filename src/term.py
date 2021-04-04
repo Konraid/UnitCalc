@@ -178,15 +178,21 @@ class TermParser:
             # region INNERSTE/UNTERSTE STUFE ERREICHT, term = value[unit]
             if '[' in self.term_text:
                 unit_starts = self.term_text.find('[')
-                self.value = float(self.term_text[:unit_starts])
+                value_text = self.term_text[:unit_starts]
                 self.unit = Unit.from_string(self.term_text[unit_starts + 1:-1:])
             else:
-                try:
-                    self.value = float(self.term_text)
-                except ValueError:
-                    # text is a constant
-                    self.value = 1
+                value_text = self.term_text
                 self.unit = Unit.identity()
+
+            try:
+                self.value = float(value_text)
+            except ValueError:
+                # text is a constant or 1
+                if not self.term_text:
+                    self.value = 1
+                else:
+                    Constants.dicts
+            self.term_text[:unit_starts]
             return self
             # endregion
         else:
