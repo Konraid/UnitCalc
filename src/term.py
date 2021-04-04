@@ -1,6 +1,7 @@
 from unit import Unit
 import math
 
+
 class TermParser:
     def getIndexOutOfBrackets(self, symbol, string):
         """
@@ -42,23 +43,23 @@ class TermParser:
         term_text = term_text.replace('**', '^')
 
         # region MEMBER DEFINITION
-        self.unit = None 
+        self.unit = None
         self.value = None
         self.term_text = None
         self.operator = None
         self.term_a = None
         self.term_b = None
-        #endregion
+        # endregion
 
         # region KLAMMERSETZUNG PRÜFEN
         if not self.checkNumOfBrackets(term_text):
             print('[ERROR] Opening Brackets are not matching closing ones')
             return
-        #endregion
+        # endregion
 
         # region ÜBERFLÜSSIGE KLAMMERN ENTFERNEN
         remove_brackets = True
-        while(remove_brackets):
+        while (remove_brackets):
             remove_brackets = False
             bracket_counter = 1
             if term_text.startswith('(') and term_text.endswith(')'):
@@ -69,15 +70,15 @@ class TermParser:
                         bracket_counter += 1
                     elif s == ')':
                         bracket_counter -= 1
-                    if bracket_counter <= 0 and i <len(term_text) -1:
+                    if bracket_counter <= 0 and i < len(term_text) - 1:
                         remove_brackets = False
                         break
-            if(remove_brackets):
+            if (remove_brackets):
                 term_text = term_text[1:-1]
         # endregion
 
         # region (SUB)TERME UNTERSCHEIDEN
-        #PUNKT VOR STRICH --> INNERSTE STRUKTUREN SIND PRODUKTE/QUOTIENTEN/...
+        # PUNKT VOR STRICH --> INNERSTE STRUKTUREN SIND PRODUKTE/QUOTIENTEN/...
         index = self.getIndexOutOfBrackets('+', term_text)
         if index != -1:
             self.operator = "+"
@@ -158,12 +159,15 @@ class TermParser:
                                                                         else:
                                                                             if term_text.startswith("arcosh("):
                                                                                 self.operator = "arcosh"
-                                                                                self.term_a = TermParser(term_text[7:-1:])
+                                                                                self.term_a = TermParser(
+                                                                                    term_text[7:-1:])
                                                                             else:
                                                                                 if term_text.startswith("artanh("):
                                                                                     self.operator = "artanh"
-                                                                                    self.term_a = TermParser(term_text[7:-1:])   
-        #endregion
+                                                                                    self.term_a = TermParser(
+                                                                                        term_text[7:-1:])
+
+        # endregion
 
         self.term_text = term_text
         self.evaluate()
@@ -177,15 +181,19 @@ class TermParser:
                 self.value = float(self.term_text[:unit_starts])
                 self.unit = Unit.from_string(self.term_text[unit_starts + 1:-1:])
             else:
-                self.value = float(self.term_text)
+                try:
+                    self.value = float(self.term_text)
+                except ValueError:
+                    # text is a constant
+                    self.value = 1
                 self.unit = Unit.identity()
             return self
             # endregion
         else:
             # region BESTIMME TERM AUS SUBTERMEN
-            if(self.term_a != None):
+            if (self.term_a != None):
                 self.term_a.evaluate()
-            if(self.term_b != None):
+            if (self.term_b != None):
                 self.term_b.evaluate()
 
             if self.operator == '+' or self.operator == '-':
@@ -216,7 +224,7 @@ class TermParser:
             elif self.operator == '^':
                 if self.term_b.unit == Unit.identity():
                     self.value = math.pow(self.term_a.value, self.term_b.value)
-                    self.unit = self.term_a.unit**self.term_b.value
+                    self.unit = self.term_a.unit ** self.term_b.value
                 else:
                     print('=======[ERROR]=======> Exponents cant have units.')
                     print('>>', self.term_text)
@@ -244,7 +252,7 @@ class TermParser:
                     self.value = 0
                     self.unit = Unit.identity()
                 return self
-            
+
             elif self.operator == "sin":
                 if self.term_a.unit == Unit.identity():
                     self.value = math.sin(self.term_a.value)
