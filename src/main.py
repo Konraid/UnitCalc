@@ -5,7 +5,7 @@ from term import TermParser
 #input_string = str(input("Enter units: "))
 input_string = '(2[kg]**4[kg]) / (2 [J^2/s*(N^2/(C))])'
 input_string = '( ((((2 [J/C]^(2) ))) )/((2[m])^(1)))'
-input_string = 'c'
+input_string = '[m]+[m]'
 base_term = TermParser(input_string)
 
 print('============================================')

@@ -205,11 +205,7 @@ class TermParser:
                     self.unit = self.term_a.unit
                     return self
                 else:
-                    print('=======[ERROR]=======> Units do not match in sum.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
-                return self
+                    raise Exception('Units do not match in sum.', self.term_text)
 
             elif self.operator == '*':
                 self.value = self.term_a.value * self.term_b.value
@@ -226,10 +222,7 @@ class TermParser:
                     self.value = math.pow(self.term_a.value, self.term_b.value)
                     self.unit = self.term_a.unit ** self.term_b.value
                 else:
-                    print('=======[ERROR]=======> Exponents cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Exponents cant have units.', self.term_text)
                 return self
 
             elif self.operator == "exp":
@@ -237,9 +230,7 @@ class TermParser:
                     self.value = math.exp(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Exponents cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
+                    raise Exception('Exponents cant have units.', self.term_text)
                 return self
 
             elif self.operator == "ln":
@@ -247,10 +238,7 @@ class TermParser:
                     self.value = math.log(self.term_a.value, math.e)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of logs cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of logs cant have units.', self.term_text)
                 return self
 
             elif self.operator == "sin":
@@ -258,10 +246,7 @@ class TermParser:
                     self.value = math.sin(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "cos":
@@ -269,10 +254,7 @@ class TermParser:
                     self.value = math.cos(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "tan":
@@ -280,10 +262,7 @@ class TermParser:
                     self.value = math.tan(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "arcsin":
@@ -291,10 +270,7 @@ class TermParser:
                     self.value = math.asin(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of inverse trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of inverse trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "arccos":
@@ -302,10 +278,7 @@ class TermParser:
                     self.value = math.acos(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of inverse trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of inverse trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "arctan":
@@ -313,10 +286,7 @@ class TermParser:
                     self.value = math.atan(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of inverse trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of inverse trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "sinh":
@@ -324,10 +294,7 @@ class TermParser:
                     self.value = math.sinh(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of hyperbolic trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of hyperbolic trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "cosh":
@@ -335,10 +302,7 @@ class TermParser:
                     self.value = math.cosh(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of hyperbolic trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of hyperbolic trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "tanh":
@@ -346,10 +310,7 @@ class TermParser:
                     self.value = math.tanh(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of hyperbolic trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of hyperbolic trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "arsinh":
@@ -357,10 +318,7 @@ class TermParser:
                     self.value = math.asinh(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of inverse hyperbolic trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of inverse hyperbolic trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "arcosh":
@@ -368,10 +326,7 @@ class TermParser:
                     self.value = math.acosh(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of inverse hyperbolic trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of inverse hyperbolic trig functions cant have units.', self.term_text)
                 return self
 
             elif self.operator == "artanh":
@@ -379,10 +334,6 @@ class TermParser:
                     self.value = math.atanh(self.term_a.value)
                     self.unit = Unit.identity()
                 else:
-                    print('=======[ERROR]=======> Arguments of inverse hyperbolic trig functions cant have units.')
-                    print('>>', self.term_text)
-                    self.value = 0
-                    self.unit = Unit.identity()
+                    raise Exception('Arguments of inverse hyperbolic trig functions cant have units.', self.term_text)
                 return self
-
             # endregion
