@@ -1,4 +1,5 @@
 from unit import Unit
+from ConstantsDict import ConstantsDict
 import math
 
 
@@ -191,8 +192,9 @@ class TermParser:
                 if not self.term_text:
                     self.value = 1
                 else:
-                    Constants.dicts
-            self.term_text[:unit_starts]
+                    (value, unit) = ConstantsDict.getInstance().LookupConst(self.term_text)
+                    self.value = value
+                    self.unit = Unit.from_string(unit)
             return self
             # endregion
         else:
