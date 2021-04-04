@@ -15,12 +15,14 @@ class ConstantsDict:
             ConstantsDict.__instance = self
 
         filepath = 'Constants.txt'
-        self.dictionary = self.CreateDictionary(filepath)
+
+        self.dictionary = None
+        self.InitDictionary(filepath)
 
         # for key in self.dictionary:
         #     print(key, self.dictionary[key])
 
-    def CreateDictionary(self, filepath):
+    def InitDictionary(self, filepath):
         lookup = open(filepath, "r")
 
         dictionary = {}
@@ -37,7 +39,7 @@ class ConstantsDict:
             addDict = {row[0]: [row[1], row[2], row[3]]}
             dictionary.update(addDict)
 
-        return dictionary
+        self.dictionary = dictionary
 
     def LookupConst(self, text):
         """
