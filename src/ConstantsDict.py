@@ -55,7 +55,4 @@ class ConstantsDict:
         value = float(self.dictionary[text][1])
         unit_str = self.dictionary[text][2]
 
-        if unit_str == "1":
-            unit_str = ""
-
         return (value, unit_str)
