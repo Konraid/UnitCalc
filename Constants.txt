@@ -1,0 +1,3 @@
+#Constant   ;Name           ;Value      ;Unit
+E           ;eulersche Zahl ;2.71828    ;1
+PI          ;PI             ;3.141592   ;1
