@@ -54,5 +54,6 @@ class ConstantsDict:
 
         value = float(self.dictionary[text][1])
         unit_str = self.dictionary[text][2]
+        print("Used " + text + ": ", self.dictionary[text])
 
         return (value, unit_str)
