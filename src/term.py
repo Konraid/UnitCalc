@@ -167,6 +167,10 @@ class TermParser:
                                                                                     self.operator = "artanh"
                                                                                     self.term_a = TermParser(
                                                                                         term_text[7:-1:])
+                                                                                else:
+                                                                                    if term_text.startswith("sqrt("):
+                                                                                        self.operator = "sqrt"
+                                                                                        self.term_a = TermParser(term_text[5:-1:])
 
         # endregion
 
@@ -343,5 +347,10 @@ class TermParser:
                     self.unit = Unit.identity()
                 else:
                     raise Exception('Arguments of inverse hyperbolic trig functions cant have units.', self.term_text)
+                return self
+            
+            elif self.operator == "sqrt":
+                self.value = math.sqrt(self.term_a.value)
+                self.unit = Unit.from_string(self.term_a.unit.unit_text)
                 return self
             # endregion
