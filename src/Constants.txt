@@ -6,10 +6,10 @@
 G           ;Gravitationskonstante                  ;6.674 30 e-11          ;(m^3)*(kg^-1)*(s^-2)
 h           ;Plancksches Wirkungsquantum            ;6.626 075 5 e-34       ;J*s
 hbar        ;Reduziertes Plancksches Wirkungsquantum;1.054 571 817 e-34     ;J*s
-k_B         ;Boltzmann Konstante                    ;1.380 658 e-23         ;J/K
 c           ;Vakuum-Lichtgeschwindigkeit            ;299 792 458            ;m/s
 epsilon_0   ;elektrische Feldkonstante              ;8.854 187 812 8 e-12   ;F/m
 mu_0        ;magnetische Feldkonstante              ;1.256 637 062 12 e-6   ;N/(A^2)
+g           ;Ortsfaktor                             ;9.806 65               ;m*(s^(-2))
 #====================================================================================================
 #--------------------------------------ELECTROMAGNETIC-----------------------------------------------
 #
@@ -18,11 +18,24 @@ e           ;Elementarladung                        ;1.602 176 634  e-19    ;C
 #====================================================================================================
 #------------------------------------ATOMIC & NUCLEAR-------------------------------------------------
 #
-a_0        ;Bohrscher Radius                       ;5.291 772 109 03 e-11  ;m
-lambda_C   ;Compton-Wellenlänge                    ;2.426 310 238 67 e-12  ;m
+a_0         ;Bohrscher Radius                       ;5.291 772 109 03 e-11  ;m
+lambda_C    ;Compton-Wellenlänge                    ;2.426 310 238 67 e-12  ;m
+g_e         ;Lande-Faktor                           ;-2.002 319 304 362 56  ;1
+gamma_e     ;gyromagnetisches Verhältnis  (Elektron);1.760 859 630 23 e11   ;(s^(-1))*(T^(-1))
+m_e         ;Elektronenmasse                        ;9.109 383 701 5 e-31   ;kg
+alpha       ;Feinstrukturkonstante                  ;7.297 352 569 3 e-3    ;1
+m_n         ;Neutronenmasse                         ;1.674 927 498 04 e-27  ;kg
+m_p         ;Protonenmasse                          ;1.672 621 923 69 e-27  ;kg
+R_inf       ;Rydberg-Konstante                      ;10 973 731.568 160     ;(m^(-1))
 #====================================================================================================
-#------------------------------------ATOMIC & NUCLEAR-------------------------------------------------
+#------------------------------------PHYSICO-CHEMICAL-------------------------------------------------
+u           ;atomare Masseneinheit                  ;1.660 539 066 60 e-27  ;kg
+N_A         ;Avigadro-Konstante                     ;6.022 140 76 e23       ;mol^(-1)
+k_B         ;Boltzmann Konstante                    ;1.380 649 e-23         ;J/K
+R           ;universelle Gaskonstante               ;8.314 462 618          ;J*(mol^(-1))*(K^(-1))
+V_m         ;molares Gasvolumen                     ;22.413 969 54 e-3      ;(m^3)*(mol^(-1))
+sigma       ;Stefan-Boltzmann-Konstante             ;5.670 374 419 e-8      ;W*(m^(-2))*(K^(-4))
 #====================================================================================================
-#------------------------------------ATOMIC & NUCLEAR-------------------------------------------------
+#------------------------------------MATHEMATICAL-------------------------------------------------
 E           ;eulersche Zahl                         ;2.718 28               ;1
 PI          ;PI                                     ;3.141 592              ;1 
