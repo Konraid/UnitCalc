@@ -57,3 +57,14 @@ class ConstantsDict:
         print("Used " + text + ": ", self.dictionary[text])
 
         return (value, unit_str)
+
+    def AddTempConstant(self, text):
+        """
+        in:
+            text - string in the format of "smybol ; Description ; Value ; Unit"
+        """
+        buffer = text.split(";")
+
+        addDict = {buffer[0]: [buffer[1],buffer[2],buffer[3]]}
+        self.dictionary.update(addDict)
+
