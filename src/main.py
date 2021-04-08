@@ -27,8 +27,8 @@ while running:
         base_term = TermParser(input_string)
         print('============================================')
         print("{:e}".format(base_term.value), '[' + str(base_term.unit) + ']')
-        print('Better? Unit: [' + str(SIConverter.getInstance().SIToUnit(base_term.unit.si_representation,
-                                                                     10, 10)) + ']')
+        print('Better? Unit: [' + SIConverter.getInstance().SIToUnit(base_term.unit.si_representation,
+                                                                     10, 10) + ']')
 
 print('')
 print('ciao...')

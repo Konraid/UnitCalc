@@ -133,7 +133,15 @@ class SIConverter:
         if(foundSolution):
             return solution[3::]
         else:
-            return si_rep_ints
+            s = ""
+            units = ['s', 'm', 'kg', 'A', 'K', 'mol', 'cd']
+            for i in range(len(units)):
+                if l[i] != 0:
+                    x = l[i]
+                    if int(x) - x == 0:
+                        x = int(x)
+                    s += " * " +units[i] + "^(" + str(x) + ")"
+            return s[3::]
             
                 
 
