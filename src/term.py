@@ -42,6 +42,7 @@ class TermParser:
     def __init__(self, term_text):
         term_text = term_text.replace(' ', '')
         term_text = term_text.replace('**', '^')
+        term_text = term_text.replace(',', '.')
 
         # region MEMBER DEFINITION
         self.unit = None
@@ -203,10 +204,10 @@ class TermParser:
             # endregion
         else:
             # region BESTIMME TERM AUS SUBTERMEN
-            if (self.term_a != None):
-                self.term_a.evaluate()
-            if (self.term_b != None):
-                self.term_b.evaluate()
+            # if (self.term_a != None):
+            #     self.term_a.evaluate()
+            # if (self.term_b != None):
+            #     self.term_b.evaluate()
 
             if self.operator == '+' or self.operator == '-':
                 if self.term_a.unit == self.term_b.unit:
