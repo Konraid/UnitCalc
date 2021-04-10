@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import readline
 
 from SIConverter import SIConverter
 from term import TermParser
