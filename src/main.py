@@ -18,7 +18,7 @@ running = True
 
 while running:
     input_string = str(input(">> "))
-    if input_string == 'end':
+    if input_string == 'end' or input_string.startswith('exit'):
         running = False
         break
     elif input_string.startswith("$"):
@@ -32,7 +32,7 @@ while running:
                                                                      10, 10) + ']')
             print('')
         except KeyError:
-            print("[ KeyError ] an unknown symbol ocurred (probably), check input")
+            print("[ KeyError ] an unknown symbol occurred (probably), check input")
             print("")
 
 print('')

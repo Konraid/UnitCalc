@@ -88,7 +88,7 @@ class TermParser:
             self.term_b = TermParser(term_text[index + 1::])
         else:
             index = self.getIndexOutOfBrackets('-', term_text)
-            if index != -1:
+            if index != -1 and index != 0:
                 self.operator = "-"
                 self.term_a = TermParser(term_text[0:index])
                 self.term_b = TermParser(term_text[index + 1::])
