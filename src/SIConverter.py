@@ -136,11 +136,11 @@ class SIConverter:
             s = ""
             units = ['s', 'm', 'kg', 'A', 'K', 'mol', 'cd']
             for i in range(len(units)):
-                if l[i] != 0:
-                    x = l[i]
+                if si_rep_ints_copy[i] != 0:
+                    x = si_rep_ints_copy[i]
                     if int(x) - x == 0:
                         x = int(x)
-                    s += " * " +units[i] + "^(" + str(x) + ")"
+                    s += " * " + units[i] + "^(" + str(x) + ")"
             return s[3::]
             
                 
