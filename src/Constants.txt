@@ -26,7 +26,7 @@ m_e         ;Elektronenmasse                        ;9.109 383 701 5 e-31   ;kg
 alpha       ;Feinstrukturkonstante                  ;7.297 352 569 3 e-3    ;1
 m_n         ;Neutronenmasse                         ;1.674 927 498 04 e-27  ;kg
 m_p         ;Protonenmasse                          ;1.672 621 923 69 e-27  ;kg
-R_inf       ;Rydberg-Konstante                      ;10 973 731.568 160     ;(m^(-1))
+R_infty     ;Rydberg-Konstante                      ;10 973 731.568 160     ;(m^(-1))
 #====================================================================================================
 #------------------------------------PHYSICO-CHEMICAL-------------------------------------------------
 u           ;atomare Masseneinheit                  ;1.660 539 066 60 e-27  ;kg
