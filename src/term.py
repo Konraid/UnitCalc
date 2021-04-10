@@ -194,7 +194,7 @@ class TermParser:
                 self.value = float(value_text)
             except ValueError:
                 # text is a constant or 1
-                if not self.term_text:
+                if not value_text:
                     self.value = 1
                 else:
                     (value, unit) = ConstantsDict.getInstance().LookupConst(self.term_text)
