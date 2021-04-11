@@ -221,16 +221,22 @@ class TermParser:
                     raise Exception('Units do not match in sum.', self.term_text)
 
             elif self.operator == '*':
+                if(self.term_a.term_text == "" or self.term_b.term_text == ""):
+                    print("[ WARNING ] \"*\"-operator missing at least 1 argument")
                 self.value = self.term_a.value * self.term_b.value
                 self.unit = self.term_a.unit * self.term_b.unit
                 return self
 
             elif self.operator == '/':
+                if(self.term_a.term_text == "" or self.term_b.term_text == ""):
+                    print("[ WARNING ] \"/\"-operator missing at least 1 argument")
                 self.value = self.term_a.value / self.term_b.value
                 self.unit = self.term_a.unit / self.term_b.unit
                 return self
 
             elif self.operator == '^':
+                if(self.term_a.term_text == "" or self.term_b.term_text == ""):
+                    print("[ WARNING ] \"^\"-operator missing at least 1 argument")
                 if self.term_b.unit == Unit.identity():
                     self.value = math.pow(self.term_a.value, self.term_b.value)
                     self.unit = self.term_a.unit ** self.term_b.value
