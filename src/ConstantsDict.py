@@ -68,8 +68,9 @@ class ConstantsDict:
 
         bracket_open = term_text.find("[")
         bracket_close = term_text.find("]")
-        
-        if(bracket_open != -1 and bracket_close > bracket_open + 1):
+        if(bracket_close == bracket_open + 1):
+            term_text = term_text.replace("[]","")
+        if(bracket_open != -1):
             value = float(term_text[0:bracket_open])
             unit = term_text[bracket_open+1:bracket_close]
         else:
