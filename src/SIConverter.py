@@ -62,6 +62,7 @@ class SIConverter:
         solution = ""
         maxTries = max_tries
         si_rep_ints_copy = copy.deepcopy(si_rep_ints)
+        bad_candidates = []
         
         #TESTE, OB IDENTITÄTS-EINHEIT VORLIEGT
         skip_the_whole_thing = True
@@ -71,55 +72,30 @@ class SIConverter:
         if(skip_the_whole_thing):
             return ""
 
-        #MAXTRIES VERSUCHE, "PASSENDERE" EINHEITEN ZU FINDEN, BEVOR SI-DARSTELLUNG VERWENDET WIRD
-        for attempt in range(maxTries):            
-            record_val = -1
-            record_unit = -1
-
-            #FINDE AM BESTEN PASSENDSTE EINHEIT
-            for unit in self.dictionary:
-                dotprod = 0
-                si_vec = self.dictionary[unit][1]
-                si_vec_norm = copy.deepcopy(si_vec)
-
-                #NORMIERTEN VEKTOR ERZEUGEN
-                si_vec_length_sq = 0
-                for val in si_vec:
-                    si_vec_length_sq += val**2
-
-                for i in range(len(si_vec)):
-                    si_vec_norm[i] = si_vec[i]/((si_vec_length_sq)**(1/2))
-
-                #SKALARPRODUKT BERECHNEN
-                for i in range(len(si_vec)):
-                    dotprod += si_vec_norm[i] * si_rep_ints_copy[i]
-
-                if abs(dotprod) > record_val:
-                    record_val = abs(dotprod)
-                    record_unit = unit
-
-            #MINIMIERE DEN RESTLICHEN DARZUSTELLENDEN VEKTOR
-            #TODO: NICHT WIEDERHOLT (BEI UNTERSCHIEDLICHEN "ATTEMPTS" DIESELBE EINHEIT 0-MAL ABZIEHEN)
-            record_unit_sivec = self.dictionary[record_unit][1]
-
-            min_length = 1000000
-            min_t = 1000000
-
-            for t in range(-abs(max_exponent), abs(max_exponent)+1):
-                length_sq = 0
-
-                for i in range(len(record_unit_sivec)):
-                    length_sq += (si_rep_ints_copy[i] - t * record_unit_sivec[i])**2
-
-                if length_sq < min_length:
-                    min_t = t
-                    min_length = length_sq
+        for attempt in range(maxTries):
             
-            for i in range(len(record_unit_sivec)):
-                    si_rep_ints_copy[i] = (si_rep_ints_copy[i] - min_t * record_unit_sivec[i])
-        
-            #FÜGE ENTSPRECHENDE EINHEIT ZUM LÖSUNGSVEKTOR HINZU
-            solution += " * " + record_unit + "^(" + str(min_t) + ")"
+            record_length_sq = 10000000
+            record_t = None
+            record_unit = None
+
+            for unit in self.dictionary:
+                current_si_vec = self.dictionary[unit][1]
+
+                for t in range(-abs(max_exponent), abs(max_exponent)+1):
+                    current_resid_length_sq = 0
+
+                    for i in range(len(current_si_vec)):
+                        current_resid_length_sq += (si_rep_ints_copy[i] - t * current_si_vec[i])**2
+
+                    if current_resid_length_sq < record_length_sq:
+                        record_length_sq = current_resid_length_sq
+                        record_t = t
+                        record_unit = unit
+
+            for j in range(len(si_rep_ints_copy)):
+                si_rep_ints_copy[j] -= record_t * self.dictionary[record_unit][1][j]
+            
+            solution += " * " + record_unit + "^(" + str(record_t) + ")"
 
             #TESTE, OB RESTVEKTOR BEREITS 0 IST
             isZero = True
@@ -129,10 +105,11 @@ class SIConverter:
             if(isZero):
                 foundSolution = True
                 break
-
+        
         if(foundSolution):
             return solution[3::]
         else:
+            print("didn't find a good solution")
             s = ""
             units = ['s', 'm', 'kg', 'A', 'K', 'mol', 'cd']
             for i in range(len(units)):
