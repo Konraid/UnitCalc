@@ -36,7 +36,7 @@ class ConstantsDict:
                 buffer.append(line.split(";"))
 
         for row in buffer:
-            addDict = {row[0]: [row[1], row[2], row[3]]}
+            addDict = {row[0]: [row[1], float(row[2]), row[3]]}
             dictionary.update(addDict)
 
         self.dictionary = dictionary
@@ -52,19 +52,32 @@ class ConstantsDict:
             unit_str - string to pass into unit.from_string()
         """
 
-        value = float(self.dictionary[text][1])
+        value = self.dictionary[text][1]
         unit_str = self.dictionary[text][2]
         print("Used " + text + ": ", self.dictionary[text])
 
         return (value, unit_str)
 
-    def AddTempConstant(self, text):
+    def AddTempConstant(self, symbol, description, term_text):
         """
         in:
-            text - string in the format of "smybol ; Description ; Value ; Unit"
+            symbol: placeholder used in equations
+            description: name of the variable
+            term_text: string in the format of "value[unit]" (without "")
         """
-        buffer = text.split(";")
 
-        addDict = {buffer[0]: [buffer[1],buffer[2],buffer[3]]}
+        bracket_open = term_text.find("[")
+        bracket_close = term_text.find("]")
+        
+        if(bracket_open != -1 and bracket_close > bracket_open + 1):
+            value = float(term_text[0:bracket_open])
+            unit = term_text[bracket_open+1:bracket_close]
+        else:
+            value = float(term_text)
+            unit = "1"
+
+        print("Added temporary variable \"" + symbol + "\" : ", [description, value, unit])
+
+        addDict = {symbol: [description, value, unit]}
         self.dictionary.update(addDict)
 
